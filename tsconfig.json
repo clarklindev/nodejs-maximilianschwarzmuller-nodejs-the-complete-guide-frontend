@@ -3,12 +3,13 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "commonJS",
+    "module": "ESNext",
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "esnext",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
+    "importsNotUsedAsValues": "error",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,

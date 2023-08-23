@@ -1,23 +1,23 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { NavLink, Form, useActionData, useNavigate } from 'react-router-dom';
 
 import styles from './Login.module.css';
-import { formDataToJsonApi } from '../../lib/helpers/formDataToJsonApi';
-import { useToken } from '../../shared/hooks/useToken';
+import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
 import { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
+import { AuthContext } from '../../context/AuthContext';
 
 export const Login = () => {
   const actionData = useActionData();
-  const [_, setToken] = useToken();
-
   const navigate = useNavigate();
+  const { setToken } = useContext(AuthContext);
 
-  if (actionData.meta !== undefined) {
-    const token = actionData.meta.token;
-    setToken(token);
-
-    navigate('/');
-  }
+  useEffect(() => {
+    if (actionData && actionData.meta && actionData.meta.token) {
+      const token = actionData.meta.token;
+      setToken(token);
+      navigate('/');
+    }
+  }, [actionData]);
 
   return (
     <div className={styles.wrapper}>
@@ -60,17 +60,16 @@ export const action = async ({ request }) => {
   const formData = new FormData();
   formData.append('email', data.get('email'));
   formData.append('password', data.get('password'));
-  const jsonData = formDataToJsonApi(formData, 'user');
+  const jsObject = formDataLikeJsonApi(formData, 'user');
 
-  const url = `${import.meta.env.VITE_BACKEND_URL}:
-    ${import.meta.env.VITE_BACKEND_PORT}/auth/login`;
+  const URI = `${import.meta.env.VITE_BACKEND_URI}/auth/login`;
 
-  const response = await fetch(url, {
+  const fetched = await fetch(URI, {
     method: 'POST',
     headers: { 'Content-Type': 'application/vnd.api+json' }, //format of what we sending
-    body: JSON.stringify(jsonData),
+    body: JSON.stringify(jsObject),
   });
 
-  const responseJSON: IJsonApiResponse | undefined = await response.json();
-  return responseJSON;
+  const response: IJsonApiResponse | undefined = await fetched.json();
+  return response;
 };

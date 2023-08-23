@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, redirect } from 'react-router-dom';
 
 import styles from './AddProduct.module.css';
-import { formDataToJsonApi } from '../../lib/helpers/formDataToJsonApi';
+import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
 
 export const AddProduct = () => {
   return (
@@ -46,7 +46,7 @@ export const action = async ({ request }) => {
   formData.append('title', data.get('title'));
   formData.append('description', data.get('description'));
   formData.append('price', data.get('price'));
-  const jsonData = formDataToJsonApi(formData, 'product');
+  const jsonData = formDataLikeJsonApi(formData, 'product');
 
   //check if formData.
   const url = `${import.meta.env.VITE_BACKEND_URL}:${

@@ -32,6 +32,11 @@ import {
   action as addProductAction,
 } from './pages/products/AddProduct';
 //auth
+import {
+  VerifySignup,
+  loader as verifyLoader,
+} from './pages/auth/VerifySignup';
+
 import { Login, action as loginAction } from './pages/auth/Login';
 import { SignUp, action as signupAction } from './pages/auth/SignUp';
 import {
@@ -39,9 +44,10 @@ import {
   action as passwordInitResetAction,
 } from './pages/auth/PasswordInitReset';
 import {
-  PasswordUpdate,
-  action as passwordUpdateAction,
-} from './pages/auth/PasswordUpdate';
+  PasswordReset,
+  action as PasswordResetAction,
+  loader as PasswordResetLoader,
+} from './pages/auth/PasswordReset';
 
 // Configure nested routes with JSX
 export const router = createBrowserRouter(
@@ -67,9 +73,15 @@ export const router = createBrowserRouter(
           action={passwordInitResetAction}
         />
         <Route
-          path='password-update'
-          element={<PasswordUpdate />}
-          action={passwordUpdateAction}
+          path='password-reset/:token'
+          element={<PasswordReset />}
+          loader={PasswordResetLoader}
+          action={PasswordResetAction}
+        />
+        <Route
+          path='verify/:token'
+          element={<VerifySignup />}
+          loader={verifyLoader}
         />
       </Route>
 

@@ -58,7 +58,7 @@ export const action = async ({ request }) => {
     import.meta.env.VITE_BACKEND_PORT
   }/auth/signup`;
 
-  const jsonData = formDataToJsonApi<UserAttributes>(formData, 'user');
+  const jsonData = formDataLikeJsonApi<UserAttributes>(formData, 'user');
 
   const result = await fetch(url, {
     method: 'POST',

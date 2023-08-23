@@ -11,5 +11,5 @@ export const useToken = () => {
     setTokenInternal(newToken);
   };
 
-  return [token, setToken];
+  return { token, setToken };
 };

@@ -1,26 +1,44 @@
-import React, { useState, createContext, useEffect } from 'react';
-import { checkTokenValidity } from '../lib/helpers/checkTokenValidity';
+import React, { createContext, useEffect, useState } from 'react';
 
-interface AuthContextData {
-  loggedIn: boolean;
-  setLoggedIn: (val: Boolean) => {};
-}
+import { useTokenPayload } from '../shared/hooks/useTokenPayload';
+import { useToken } from '../shared/hooks/useToken';
 
-export const AuthContext = createContext({} as AuthContextData);
+export const AuthContext = createContext({
+  isTokenValid: false,
+  setToken: () => {},
+  tokenPayload: {},
+});
 
 export const AuthContextProvider: React.FC = (props) => {
-  const token = localStorage.getItem('token');
-  const isTokenValid = token ? checkTokenValidity(token) : false;
+  const { token, setToken } = useToken();
+  const { tokenPayload, _ } = useTokenPayload();
+  const [isTokenValid, setIsTokenValid] = useState();
 
-  if (!isTokenValid) {
-    localStorage.setItem('token', ''); //also clear token
-  }
+  const checkToken = async (token) => {
+    //use server side to check token
+    const URI = `${import.meta.env.VITE_BACKEND_URI}/auth/verify/${token}`;
 
-  const [loggedIn, setLoggedIn] = useState(isTokenValid); // Initialize loggedIn with a default value of false
+    const fetched = await fetch(URI, {
+      method: 'GET',
+    });
 
+    const response: IJsonApiResponse | undefined = await fetched.json(); // Parse the JSON response body - returns js object
+    console.log('response: ', response);
+  };
+
+  useEffect(() => {
+    const isValid = token ? checkToken(token) : false;
+    if (!isValid) {
+      setToken('');
+    }
+    setIsTokenValid(isValid);
+  }, [token, checkToken]);
+
+  //context
   const stuffToShare = {
-    loggedIn,
-    setLoggedIn,
+    isTokenValid,
+    setToken,
+    tokenPayload,
   };
 
   return (

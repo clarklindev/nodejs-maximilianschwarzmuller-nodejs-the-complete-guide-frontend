@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import styles from './Navbar.module.css';
 import { AuthContext } from '../context/AuthContext';
 
 export const Navbar = () => {
-  const { loggedIn, setLoggedIn } = useContext(AuthContext);
+  const { isTokenValid, setToken } = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    setLoggedIn(false);
-    localStorage.setItem('token', '');
+    setToken('');
     navigate('/');
   };
 
@@ -40,7 +40,7 @@ export const Navbar = () => {
           </NavLink>
         </div>
 
-        {loggedIn ? (
+        {isTokenValid ? (
           <div className={styles.navRight}>
             <NavLink
               className={({ isActive }) => `nav-link ${isActive && 'active'}`}

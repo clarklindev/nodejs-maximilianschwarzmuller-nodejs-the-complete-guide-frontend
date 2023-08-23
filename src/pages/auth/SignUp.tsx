@@ -1,23 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, Form, useActionData, useNavigate } from 'react-router-dom';
 
 import styles from './SignUp.module.css';
-import { formDataToJsonApi } from '../../lib/helpers/formDataToJsonApi';
-import { useToken } from '../../shared/hooks/useToken';
-import { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
-
+import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
+import type { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
 export const SignUp = () => {
   const actionData = useActionData();
-  const [_, setToken] = useToken();
-
   const navigate = useNavigate();
 
-  if (actionData.meta) {
-    const token = actionData.meta.token;
-    setToken(token);
-
-    navigate('/');
-  }
+  useEffect(() => {
+    if (actionData && actionData.meta && actionData.meta.token) {
+      navigate('/auth/login');
+    }
+  }, [actionData]);
 
   return (
     <div className={styles.wrapper}>
@@ -46,12 +41,16 @@ export const SignUp = () => {
         </div>
 
         <br />
-
+        <div className={styles['form-control']}>
+          {actionData?.errors &&
+            actionData.errors.map((error, index) => {
+              return <div key={index}>{error.title}</div>;
+            })}
+        </div>
         <div>
           account already exists? <NavLink to='/auth/login'>Login</NavLink>
         </div>
       </Form>
-      {actionData && actionData.errors && <p>{actionData.errors}</p>}
     </div>
   );
 };
@@ -64,17 +63,17 @@ export const action = async ({ request }) => {
   formData.append('username', data.get('username'));
   formData.append('email', data.get('email'));
   formData.append('password', data.get('password'));
-  const jsonData = formDataToJsonApi(formData, 'user');
+  const jsObject = formDataLikeJsonApi(formData, 'user');
 
-  const url = `${import.meta.env.VITE_BACKEND_URL}:${
-    import.meta.env.VITE_BACKEND_PORT
-  }/auth/signup`;
-  const response = await fetch(url, {
+  const URI = `${import.meta.env.VITE_BACKEND_URI}/auth/signup`;
+
+  const fetched = await fetch(URI, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/vnd.api+json' },
-    body: JSON.stringify(jsonData),
+    headers: { 'Content-Type': 'application/vnd.api+json' }, //format of what we sending
+    body: JSON.stringify(jsObject), //stringify converts obj to JSON
   });
 
-  const responseJSON: IJsonApiResponse | undefined = await response.json(); // Parse the JSON response body
-  return responseJSON;
+  const response: IJsonApiResponse | undefined = await fetched.json(); // Parse the JSON response body - returns js object
+
+  return response;
 };
