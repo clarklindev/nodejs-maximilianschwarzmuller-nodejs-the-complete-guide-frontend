@@ -2,6 +2,7 @@ import React from 'react';
 import type { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
 import { useLoaderData } from 'react-router-dom';
 
+// signup email received an user clicks link to verify email.
 export const VerifySignup = () => {
   //show loader when interacting with backend
   const loaderData = useLoaderData();

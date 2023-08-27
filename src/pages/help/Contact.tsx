@@ -1,10 +1,9 @@
 import React from 'react';
 import { Form, redirect, useActionData } from 'react-router-dom';
+import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
 import styles from './Contact.module.css';
-import { useHttpClient } from '../../shared/hooks/http-hook';
 export const Contact = () => {
   const data = useActionData();
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   return (
     <>
@@ -31,22 +30,21 @@ export const action = async ({ request }) => {
   console.log(request);
 
   const data = await request.formData();
+  const formData = new FormData();
+  formData.append('email', data.get('email'));
+  formData.append('message', data.get('message'));
 
-  //send post request
-  if (submission.message.length < 10) {
-    return { error: 'message must be over 10 chars long' };
-  }
+  const jsObject = formDataLikeJsonApi(formData, 'user');
 
-  try {
-    const response = await sendRequest(
-      'http:localhost:3000/contacts',
-      'POST',
-      data
-    );
-    console.log('FRONTEND response:', response);
-  } catch (err) {
-    console.log(err);
-  }
+  const URI = 'http:localhost:3000/contacts';
+
+  const response = await fetch(URI, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/vnd.api+json' }, //format of what we sending
+    body: JSON.stringify(jsObject),
+  });
+
+  console.log('FRONTEND response:', response);
 
   //redirect user
   return redirect('/');

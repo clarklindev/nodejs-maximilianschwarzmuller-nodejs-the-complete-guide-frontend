@@ -7,7 +7,7 @@ interface JsonApiResource {
 
 export function formDataLikeJsonApi(formData: FormData, resourceType: string) {
   //convert formData
-  const formDataObject = {};
+  const formDataObject: Record<string, any> = {};
 
   for (const [key, value] of formData.entries()) {
     formDataObject[key] = value;

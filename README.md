@@ -58,7 +58,7 @@ export const action = async ({ request }) => {
     import.meta.env.VITE_BACKEND_PORT
   }/auth/signup`;
 
-  const jsonData = formDataLikeJsonApi<UserAttributes>(formData, 'user');
+  const jsonData = formDataLikeJsonApi<IUserAttributes>(formData, 'user');
 
   const result = await fetch(url, {
     method: 'POST',
@@ -334,3 +334,8 @@ localStorage.removeItem('token');
 
 - you can choose between using custom hooks or context/state management like redux.
 - i initially went with auth context but im switching to custom hooks because it seems cleaner
+
+### note with regards to tokens when in incognito
+
+- if you are in incognito mode, the problem is that the browser doesnt store cookies OR store to localstorage. this is a problem as testing tokens after being logged in (and then closing the browser)
+  would actually delete all stored content.

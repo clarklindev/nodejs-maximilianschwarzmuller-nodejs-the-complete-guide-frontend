@@ -6,7 +6,6 @@ import { AuthContext } from '../context/AuthContext';
 
 export const Navbar = () => {
   const { isTokenValid, setToken } = useContext(AuthContext);
-
   const navigate = useNavigate();
 
   const handleLogout = async () => {
