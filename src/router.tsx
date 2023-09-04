@@ -79,7 +79,7 @@ export const router = createBrowserRouter(
           action={PasswordResetAction}
         />
         <Route
-          path='verify/:token'
+          path='verify/signup/:token'
           element={<VerifySignup />}
           loader={verifyLoader}
         />

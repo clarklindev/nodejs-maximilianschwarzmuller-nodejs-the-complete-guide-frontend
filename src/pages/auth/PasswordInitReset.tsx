@@ -1,19 +1,23 @@
 import React from 'react';
 import { Form, NavLink, useActionData } from 'react-router-dom';
 
-import styles from './SignUp.module.css';
+import styles from './PasswordInitReset.module.css';
 import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
-import { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
+import type { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
 
 export const PasswordInitReset = () => {
-  const data = useActionData();
+  const actionData = useActionData();
+
+  if (actionData?.meta?.status) {
+    return <div>we have sent you a reset email. please check your inbox</div>;
+  }
 
   return (
     <div className={styles.wrapper}>
       <Form
         className={styles['form']}
-        action='/auth/password-init-reset'
         method='POST'
+        action='/auth/password-init-reset'
       >
         <div className={styles['form-control']}>
           <label htmlFor='email'>Email</label>
@@ -22,6 +26,15 @@ export const PasswordInitReset = () => {
         <div className={styles['form-buttons']}>
           <button type='submit'>Reset</button>
         </div>
+
+        <br />
+        <div className={styles['form-control']}>
+          {actionData?.errors &&
+            actionData.errors.map((error, index) => {
+              return <div key={index}>{error.title}: {error.detail}</div>;
+            })}
+        </div>
+        
         <br />
         back to <NavLink to='/auth/login'>login</NavLink>
       </Form>
@@ -42,7 +55,7 @@ export const action = async ({ request }) => {
   const fetched = await fetch(URI, {
     method: 'POST',
     headers: { 'Content-Type': 'application/vnd.api+json' }, //format of what we sending
-    body: JSON.stringify(jsObject),
+    body: JSON.stringify(jsObject), //stringify converts obj to JSON
   });
 
   const response: IJsonApiResponse | undefined = await fetched.json();

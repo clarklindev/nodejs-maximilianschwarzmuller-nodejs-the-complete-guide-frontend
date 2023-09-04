@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, useParams, useLoaderData, Link } from 'react-router-dom';
+import { Form, useParams, useLoaderData, useActionData, Link } from 'react-router-dom';
 
 import styles from './PasswordReset.module.css';
 import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
@@ -10,16 +10,29 @@ import { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
 export const PasswordReset = () => {
   const { token } = useParams();
   const loaderData = useLoaderData();
+  const actionData = useActionData();
   let output;
 
-  console.log('loaderData: ', loaderData);
+  if(actionData?.meta?.status){
+    output = (<div>password updated</div>)
+    return output;
+  }
 
-  if (loaderData?.meta?.isResetTokenValid) {
+  if (loaderData?.meta?.isResetTokenValid === false){ 
+    output = (
+      <div>
+        token expired. request new reset password
+        <Link to='/auth/password-init-reset'>link</Link>
+      </div>
+    );
+  }
+    
+  else{
     output = (
       <div className={styles.wrapper}>
         <Form
           className={styles['form']}
-          action={`/auth/password-update/${token}`}
+          action={`/auth/password-reset/${token}`}
           method='POST'
         >
           <div className={styles['form-control']}>
@@ -34,39 +47,39 @@ export const PasswordReset = () => {
               id='confirmPassword'
             />
           </div>
+
+          <br />
+          <div className={styles['form-control']}>
+            {actionData?.errors &&
+              actionData.errors.map((error, index) => {
+                return <div key={index}>{error.title}: {error.detail}</div>;
+              })}
+          </div>
+
           <div className={styles['form-buttons']}>
             <button type='submit'>Update</button>
           </div>
         </Form>
       </div>
     );
-  } else {
-    output = (
-      <div>
-        request new reset password{' '}
-        <Link to='/auth/password-init-reset'>link</Link>
-      </div>
-    );
-  }
+  } 
 
   return output;
 };
 
 export const loader = async ({ params }) => {
   const { token } = params;
-  console.log('token: ', token);
 
   //make a call to server to check that token is still valid
   const URI = `${
     import.meta.env.VITE_BACKEND_URI
-  }/auth/verify-resettoken/${token}`;
+  }/auth/verify/reset/${token}`;
 
   const fetched = await fetch(URI, {
     method: 'GET',
   });
 
   const response: IJsonApiResponse = await fetched.json();
-  console.log('response: ', response);
   return response;
 };
 

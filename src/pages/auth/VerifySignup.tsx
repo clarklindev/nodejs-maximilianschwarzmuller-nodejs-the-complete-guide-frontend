@@ -21,7 +21,7 @@ export const loader = async ({ params }) => {
   //make a call to server to check that token is still valid - this is the same token from signup
   const URI = `${
     import.meta.env.VITE_BACKEND_URI
-  }/auth/verify-signuptoken/${token}`;
+  }/auth/verify/signup/${token}`;
 
   const fetched = await fetch(URI, {
     method: 'GET',

@@ -3,7 +3,7 @@ import { NavLink, Form, useActionData, useNavigate } from 'react-router-dom';
 
 import styles from './Login.module.css';
 import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
-import { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
+import type { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
 import { AuthContext } from '../../context/AuthContext';
 
 export const Login = () => {
@@ -12,12 +12,12 @@ export const Login = () => {
   const { setToken } = useContext(AuthContext);
 
   useEffect(() => {
-    if (actionData && actionData.meta && actionData.meta.token) {
-      const token = actionData.meta.token;
-      setToken(token);
-      navigate('/');
-    }
-  }, [actionData]);
+  if (actionData && actionData.meta && actionData.meta.token) {
+    const token = actionData.meta.token;
+    setToken(token);
+    navigate('/');
+  }
+}, [actionData]);
 
   return (
     <div className={styles.wrapper}>
@@ -43,12 +43,18 @@ export const Login = () => {
         </div>
 
         <br />
-
+        <div className={styles['form-control']}>
+          {actionData?.errors &&
+            actionData.errors.map((error, index) => {
+              return <div key={index}>{error.title}: {error.detail}</div>;
+            })}
+        </div>
+        
         <div>
           Dont have an account? <NavLink to='/auth/signup'>Sign up</NavLink>
         </div>
       </Form>
-      {actionData && actionData.errors && <p>{actionData.errors}</p>}
+
     </div>
   );
 };

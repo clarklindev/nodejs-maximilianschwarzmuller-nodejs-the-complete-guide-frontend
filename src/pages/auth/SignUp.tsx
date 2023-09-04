@@ -1,25 +1,27 @@
-import React, { useEffect } from 'react';
-import { NavLink, Form, useActionData, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Form, NavLink, useActionData } from 'react-router-dom';
 
 import styles from './SignUp.module.css';
 import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
 import type { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
+
 export const SignUp = () => {
   const actionData = useActionData();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (actionData && actionData.meta && actionData.meta.token) {
-      navigate('/auth/login');
-    }
-  }, [actionData]);
+  if (actionData?.meta?.message){
+    return <div>you have successfully signed up. login <NavLink to="/auth/login">here</NavLink></div>
+  }  
 
   return (
     <div className={styles.wrapper}>
-      <Form className={styles['form']} action='/auth/signup' method='POST'>
+      <Form 
+        className={styles['form']} 
+        method="POST" 
+        action="/auth/signup"
+      >
         <div className={styles['form-control']}>
-          <label htmlFor='username'>Username</label>
-          <input type='text' name='username' />
+          <label htmlFor='name'>name</label>
+          <input type='text' name='name' />
         </div>
         <div className={styles['form-control']}>
           <label htmlFor='email'>Email</label>
@@ -44,9 +46,10 @@ export const SignUp = () => {
         <div className={styles['form-control']}>
           {actionData?.errors &&
             actionData.errors.map((error, index) => {
-              return <div key={index}>{error.title}</div>;
+              return <div key={index}>{error.title}: {error.detail}</div>;
             })}
         </div>
+
         <div>
           account already exists? <NavLink to='/auth/login'>Login</NavLink>
         </div>
@@ -60,7 +63,7 @@ export const action = async ({ request }) => {
 
   //limit what we send back to server by creating a new FormData() instance
   const formData = new FormData();
-  formData.append('username', data.get('username'));
+  formData.append('name', data.get('name'));
   formData.append('email', data.get('email'));
   formData.append('password', data.get('password'));
   const jsObject = formDataLikeJsonApi(formData, 'user');
@@ -74,6 +77,5 @@ export const action = async ({ request }) => {
   });
 
   const response: IJsonApiResponse | undefined = await fetched.json(); // Parse the JSON response body - returns js object
-
   return response;
 };
