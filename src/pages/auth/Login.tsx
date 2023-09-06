@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NavLink, Form, useActionData, useNavigate } from 'react-router-dom';
 
 import styles from './Login.module.css';
@@ -9,18 +9,61 @@ import { AuthContext } from '../../context/AuthContext';
 export const Login = () => {
   const actionData = useActionData();
   const navigate = useNavigate();
+
   const { setToken } = useContext(AuthContext);
+  const [googleOAuthUrl, setGoogleOAuthUrl] = useState('');
+
 
   useEffect(() => {
-  if (actionData && actionData.meta && actionData.meta.token) {
-    const token = actionData.meta.token;
-    setToken(token);
-    navigate('/');
+    if (actionData && actionData.meta && actionData.meta.token) {
+      const token = actionData.meta.token;
+      setToken(token);
+      navigate('/');
+    }
+  }, [actionData]);
+
+  useEffect(()=>{
+    const loadOAuthUrl = async ()=>{
+      try{
+        const url:string = `${import.meta.env.VITE_BACKEND_URI}/auth/oauth/google/url`;
+        const response = await fetch(url);
+
+        const {url:googleOAuthUrl} = await response.json();
+        setGoogleOAuthUrl(googleOAuthUrl);
+      }
+      catch(err:any){
+        const error = new Error(err.message);
+        throw error;
+      }
+    }
+    loadOAuthUrl();
+  },[]);
+
+  const oAuthGoogleClickHandler = ()=>{
+    // open in same window
+    //window.location.href=googleOAuthUrl
+    // Open a new window with the Google OAuth URL
+    window.open(googleOAuthUrl, 'Google OAuth', 'width=500,height=600');
   }
-}, [actionData]);
+
+  window.addEventListener('message', event => {
+    // Check the event origin for security (event.origin)
+    if (event.origin !== import.meta.env.VITE_BACKEND_URI) {
+      return; // Ignore messages from untrusted origins
+    }
+  
+    // Access the message data sent from the child window
+    const token = event.data;
+    if(token){
+      setToken(token);
+      navigate('/');
+    }
+  });
 
   return (
     <div className={styles.wrapper}>
+      <button disabled={!googleOAuthUrl} onClick={oAuthGoogleClickHandler}>Login with google</button>
+
       {/* action= url to which the form will be submitted */}
       <Form className={styles['form']} action='/auth/login' method='POST'>
         <div className={styles['form-control']}>
@@ -46,7 +89,7 @@ export const Login = () => {
         <div className={styles['form-control']}>
           {actionData?.errors &&
             actionData.errors.map((error, index) => {
-              return <div key={index}>{error.title}: {error.detail}</div>;
+              return <div key={index}>{error.title ? `${error.title}:`:''}{error.detail ? `${error.detail}`:''}</div>;
             })}
         </div>
         
@@ -69,7 +112,6 @@ export const action = async ({ request }) => {
   const jsObject = formDataLikeJsonApi(formData, 'user');
 
   const URI = `${import.meta.env.VITE_BACKEND_URI}/auth/login`;
-
   const fetched = await fetch(URI, {
     method: 'POST',
     headers: { 'Content-Type': 'application/vnd.api+json' }, //format of what we sending

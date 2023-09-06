@@ -83,6 +83,7 @@ export const router = createBrowserRouter(
           element={<VerifySignup />}
           loader={verifyLoader}
         />
+
       </Route>
 
       {/* products */}
