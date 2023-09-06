@@ -52,7 +52,7 @@ export const PasswordReset = () => {
           <div className={styles['form-control']}>
             {actionData?.errors &&
               actionData.errors.map((error, index) => {
-                return <div key={index}>{error.title}: {error.detail}</div>;
+                return <div key={index}>{error.title ? `${error.title}:`:''}{error.detail ? `${error.detail}`:''}</div>;
               })}
           </div>
 

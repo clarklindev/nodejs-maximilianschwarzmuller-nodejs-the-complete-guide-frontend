@@ -3,7 +3,7 @@ import { useToken } from '../shared/hooks/useToken';
 
 export const AuthContext = createContext({
   isTokenValid: false,
-  setToken: () => {},
+  setToken: (token:string) => {},
 });
 
 export const AuthContextProvider: React.FC = (props) => {
