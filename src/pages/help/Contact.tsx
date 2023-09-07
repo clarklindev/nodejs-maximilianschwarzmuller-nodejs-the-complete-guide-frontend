@@ -8,14 +8,14 @@ export const Contact = () => {
   return (
     <>
       <h3>Contact</h3>
-      <Form className={styles.form} method='post' action='/help/contact'>
+      <Form className={styles.form} method="post" action="/help/contact">
         <label>
           <span>your email:</span>
-          <input type='email' name='email' required />
+          <input type="email" name="email" required />
         </label>
         <label>
           <span>your message:</span>
-          <textarea name='message' required />
+          <textarea name="message" required />
         </label>
 
         <button>Submit</button>
@@ -27,8 +27,6 @@ export const Contact = () => {
 };
 
 export const action = async ({ request }) => {
-  console.log(request);
-
   const data = await request.formData();
   const formData = new FormData();
   formData.append('email', data.get('email'));
@@ -43,9 +41,6 @@ export const action = async ({ request }) => {
     headers: { 'Content-Type': 'application/vnd.api+json' }, //format of what we sending
     body: JSON.stringify(jsObject),
   });
-
-  console.log('FRONTEND response:', response);
-
   //redirect user
   return redirect('/');
 };

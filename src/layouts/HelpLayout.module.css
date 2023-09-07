@@ -1,5 +1,5 @@
-.nav{
-  display:flex;
+.nav {
+  display: flex;
   gap: 5px 10px;
   margin-bottom: 20px;
 }
@@ -10,10 +10,8 @@
   text-decoration: none;
 }
 
-
 .active {
   /* Styles for active NavLink */
   color: red;
   text-decoration: none;
 }
-

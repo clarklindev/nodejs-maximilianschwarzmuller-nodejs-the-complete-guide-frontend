@@ -10,9 +10,10 @@ export const Login = () => {
   const actionData = useActionData();
   const navigate = useNavigate();
 
-  const { setToken } = useContext(AuthContext);
+  //normal email/password jwt authentication
+  const { setToken, isTokenValid } = useContext(AuthContext);
+  //oauth
   const [googleOAuthUrl, setGoogleOAuthUrl] = useState('');
-
 
   useEffect(() => {
     if (actionData && actionData.meta && actionData.meta.token) {
@@ -22,82 +23,85 @@ export const Login = () => {
     }
   }, [actionData]);
 
-  useEffect(()=>{
-    const loadOAuthUrl = async ()=>{
-      try{
-        const url:string = `${import.meta.env.VITE_BACKEND_URI}/auth/oauth/google/url`;
-        const response = await fetch(url);
+  //open up a window with the access code given back from authentication server
+  const oAuthGoogleClickHandler = async () => {
+    if (googleOAuthUrl === '') {
+      // open in same window
+      //window.location.href=googleOAuthUrl
+      // Open a new window
+      window.open(undefined, 'Google OAuth', 'width=500,height=600');
 
-        const {url:googleOAuthUrl} = await response.json();
-        setGoogleOAuthUrl(googleOAuthUrl);
-      }
-      catch(err:any){
-        const error = new Error(err.message);
-        throw error;
-      }
+      const url: string = `${import.meta.env.VITE_BACKEND_URI}/auth/oauth/google`;
+      const response = await fetch(url);
+      const { url: googleOAuthUrl } = await response.json();
+      setGoogleOAuthUrl(googleOAuthUrl);
+      window.open(googleOAuthUrl, 'Google OAuth', 'width=500,height=600');
+    } else {
+      // Open a new window with the Google OAuth URL
+      window.open(googleOAuthUrl, 'Google OAuth', 'width=500,height=600');
     }
-    loadOAuthUrl();
-  },[]);
+  };
 
-  const oAuthGoogleClickHandler = ()=>{
-    // open in same window
-    //window.location.href=googleOAuthUrl
-    // Open a new window with the Google OAuth URL
-    window.open(googleOAuthUrl, 'Google OAuth', 'width=500,height=600');
-  }
-
-  window.addEventListener('message', event => {
+  window.addEventListener('message', (event) => {
     // Check the event origin for security (event.origin)
     if (event.origin !== import.meta.env.VITE_BACKEND_URI) {
       return; // Ignore messages from untrusted origins
     }
-  
     // Access the message data sent from the child window
     const token = event.data;
-    if(token){
+    if (token) {
       setToken(token);
       navigate('/');
     }
   });
 
+  useEffect(() => {
+    if (isTokenValid) {
+      navigate('/');
+    }
+  }, [isTokenValid]);
+
   return (
     <div className={styles.wrapper}>
-      <button disabled={!googleOAuthUrl} onClick={oAuthGoogleClickHandler}>Login with google</button>
+      <button onClick={oAuthGoogleClickHandler}>Login with google</button>
 
       {/* action= url to which the form will be submitted */}
-      <Form className={styles['form']} action='/auth/login' method='POST'>
+      <Form className={styles['form']} action="/auth/login" method="POST">
         <div className={styles['form-control']}>
-          <label htmlFor='email'>Email</label>
-          <input type='email' name='email' id='email' />
+          <label htmlFor="email">Email</label>
+          <input type="email" name="email" id="email" />
         </div>
         <div className={styles['form-control']}>
-          <label htmlFor='password'>Password</label>
-          <input type='password' name='password' id='password' />
+          <label htmlFor="password">Password</label>
+          <input type="password" name="password" id="password" />
         </div>
         <div>
-          Forgot your password?{' '}
-          <NavLink to='/auth/password-init-reset'>Reset password</NavLink>
+          Forgot your password? <NavLink to="/auth/password-init-reset">Reset password</NavLink>
         </div>
 
         <br />
 
         <div className={styles['form-buttons']}>
-          <button type='submit'>Login</button>
+          <button type="submit">Login</button>
         </div>
 
         <br />
         <div className={styles['form-control']}>
           {actionData?.errors &&
             actionData.errors.map((error, index) => {
-              return <div key={index}>{error.title ? `${error.title}:`:''}{error.detail ? `${error.detail}`:''}</div>;
+              return (
+                <div key={index}>
+                  {error.title ? `${error.title}:` : ''}
+                  {error.detail ? `${error.detail}` : ''}
+                </div>
+              );
             })}
         </div>
-        
+
         <div>
-          Dont have an account? <NavLink to='/auth/signup'>Sign up</NavLink>
+          Dont have an account? <NavLink to="/auth/signup">Sign up</NavLink>
         </div>
       </Form>
-
     </div>
   );
 };

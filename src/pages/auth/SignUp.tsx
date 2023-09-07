@@ -8,50 +8,55 @@ import type { IJsonApiResponse } from '../../interfaces/IJsonApiResponse';
 export const SignUp = () => {
   const actionData = useActionData();
 
-  if (actionData?.meta?.message){
-    return <div>you have successfully signed up. login <NavLink to="/auth/login">here</NavLink></div>
-  }  
+  if (actionData?.meta?.message) {
+    return (
+      <div>
+        you have successfully signed up. login <NavLink to="/auth/login">here</NavLink>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.wrapper}>
-      <Form 
-        className={styles['form']} 
-        method="POST" 
-        action="/auth/signup"
-      >
+      <Form className={styles['form']} method="POST" action="/auth/signup">
         <div className={styles['form-control']}>
-          <label htmlFor='name'>name</label>
-          <input type='text' name='name' />
+          <label htmlFor="name">name</label>
+          <input type="text" name="name" />
         </div>
         <div className={styles['form-control']}>
-          <label htmlFor='email'>Email</label>
-          <input type='email' name='email' />
+          <label htmlFor="email">Email</label>
+          <input type="email" name="email" />
         </div>
         <div className={styles['form-control']}>
-          <label htmlFor='password'>Password</label>
-          <input type='password' name='password' />
+          <label htmlFor="password">Password</label>
+          <input type="password" name="password" />
         </div>
         <div className={styles['form-control']}>
-          <label htmlFor='confirmPassword'>Confirm password</label>
-          <input type='password' name='confirmPassword' />
+          <label htmlFor="confirmPassword">Confirm password</label>
+          <input type="password" name="confirmPassword" />
         </div>
 
         <br />
 
         <div className={styles['form-buttons']}>
-          <button type='submit'>Sign up</button>
+          <button type="submit">Sign up</button>
         </div>
 
         <br />
         <div className={styles['form-control']}>
           {actionData?.errors &&
             actionData.errors.map((error, index) => {
-              return <div key={index}>{error.title ? `${error.title}:`:''}{error.detail ? `${error.detail}`:''}</div>;
+              return (
+                <div key={index}>
+                  {error.title ? `${error.title}:` : ''}
+                  {error.detail ? `${error.detail}` : ''}
+                </div>
+              );
             })}
         </div>
 
         <div>
-          account already exists? <NavLink to='/auth/login'>Login</NavLink>
+          account already exists? <NavLink to="/auth/login">Login</NavLink>
         </div>
       </Form>
     </div>

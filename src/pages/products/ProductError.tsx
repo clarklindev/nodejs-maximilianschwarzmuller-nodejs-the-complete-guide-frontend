@@ -8,7 +8,7 @@ export const ProductError = () => {
     <div>
       <h2>error</h2>
       <p>{error.message}</p>
-      <Link to='/'>back to homepage</Link>
+      <Link to="/">back to homepage</Link>
     </div>
   );
 };

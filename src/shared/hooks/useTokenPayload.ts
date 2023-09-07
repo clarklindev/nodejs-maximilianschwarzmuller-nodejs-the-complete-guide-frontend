@@ -13,10 +13,10 @@ export const useTokenPayload = () => {
     try {
       const encodedPayload = token.split('.')[1];
       const decodedPayload = JSON.parse(atob(encodedPayload));
-      console.log('decodedPayload:', decodedPayload);
       return decodedPayload;
     } catch (error) {
-      console.error('Error decoding token payload:', error);
+      const error = new Error('Error decoding token payload');
+      console.log(error);
       return null;
     }
   };

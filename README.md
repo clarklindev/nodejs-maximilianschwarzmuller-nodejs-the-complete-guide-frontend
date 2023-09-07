@@ -1,23 +1,20 @@
 ## serving files statically
 
+## 2023-09-07 - this is a fork of https://github.com/clarklindev/nodejs-maximilianschwarzmuller-nodejs-the-complete-guide-frontend.git
+
 ## FRONTEND - form
 
 - after setting the folder to serve files statically on the backend,
 
 ```js
-import { Form, redirect } from "react-router-dom";
-<Form
-  method="post"
-  encType="multipart/form-data"
-  action="/testing/upload"
-  className={styles.form}
->
-  <div className={styles["form-control"]}>
+import { Form, redirect } from 'react-router-dom';
+<Form method="post" encType="multipart/form-data" action="/testing/upload" className={styles.form}>
+  <div className={styles['form-control']}>
     <label htmlFor="name">name</label>
     <input name="name" />
   </div>
 
-  <div className={styles["form-control"]}>
+  <div className={styles['form-control']}>
     <label htmlFor="upload">upload</label>
     <input name="upload" type="file" />
   </div>
@@ -42,7 +39,7 @@ import { Form, redirect } from "react-router-dom";
 
 ```ts
 // Middleware to parse incoming JSON data with JSON API content type
-app.use(express.json({ type: "application/vnd.api+json" }));
+app.use(express.json({ type: 'application/vnd.api+json' }));
 ```
 
 ```ts
@@ -50,20 +47,18 @@ export const action = async ({ request }) => {
   const data = await request.formData();
 
   const formData = new FormData();
-  formData.append("name", data.get("name"));
-  formData.append("email", data.get("email"));
-  formData.append("password", data.get("password"));
+  formData.append('name', data.get('name'));
+  formData.append('email', data.get('email'));
+  formData.append('password', data.get('password'));
 
-  const url = `${import.meta.env.VITE_BACKEND_URL}:${
-    import.meta.env.VITE_BACKEND_PORT
-  }/auth/signup`;
+  const url = `${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/auth/signup`;
 
-  const jsonData = formDataLikeJsonApi<IUserAttributes>(formData, "user");
+  const jsonData = formDataLikeJsonApi<IUserAttributes>(formData, 'user');
 
   const result = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/vnd.api+json", // Set the correct content type for JSON API
+      'Content-Type': 'application/vnd.api+json', // Set the correct content type for JSON API
     },
     body: JSON.stringify(jsonData), // Convert the data to JSON string
   });
@@ -87,18 +82,13 @@ data.forEach((value, key) => {
   formDataAsObject[key] = value;
 });
 
-const result = await fetch(
-  `${import.meta.env.VITE_BACKEND_URL}:${
-    import.meta.env.VITE_BACKEND_PORT
-  }/auth/login`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formDataAsObject), // Convert to JSON string
-  }
-);
+const result = await fetch(`${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(formDataAsObject), // Convert to JSON string
+});
 ```
 
 ### send as formData
@@ -110,16 +100,14 @@ const result = await fetch(
 
 const data = await request.formData(); //form data received from form post.
 
-const url = `${import.meta.env.VITE_BACKEND_URL}:${
-  import.meta.env.VITE_BACKEND_PORT
-}/testing/upload`;
+const url = `${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/testing/upload`;
 
 // //send post request
 const result = await fetch(url, {
-  method: "POST",
+  method: 'POST',
   body: data,
   headers: {
-    "Content-Type": "multipart/form-data",
+    'Content-Type': 'multipart/form-data',
   },
 });
 ```
@@ -137,21 +125,21 @@ update vite.config.js to include build:{ target:'es2020'} etc..
 
 ```js
 // viteconfig.js
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   css: {
     modules: {
-      localsConvention: "camelCase",
+      localsConvention: 'camelCase',
     },
   },
 
   // include this to get import.meta.env working in the code (see below)
   build: {
-    target: "es2020", // Set the target to ES2020 or newer
+    target: 'es2020', // Set the target to ES2020 or newer
     polyfillDynamicImport: false, // Disable dynamic import polyfill if necessary
   },
 });
@@ -174,10 +162,10 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 ```ts
 const url = new URL(request.url);
-console.log("url:", url);
+console.log('url:', url);
 
-const page = url.searchParams.get("page");
-console.log("page: ", page);
+const page = url.searchParams.get('page');
+console.log('page: ', page);
 ```
 
 ---
@@ -187,11 +175,11 @@ console.log("page: ", page);
 ```ts
 // on the server
 const token = await jwt.sign(saveInToken, process.env.JWT_SECRET!, {
-  expiresIn: "1h",
+  expiresIn: '1h',
 });
 
-res.cookie("token", token, { httpOnly: true, secure: true });
-res.send("Login successful");
+res.cookie('token', token, { httpOnly: true, secure: true });
+res.send('Login successful');
 ```
 
 - then all you do is check for token presence checkLoggedIn()
@@ -200,8 +188,8 @@ res.send("Login successful");
 // Function to check if the token cookie is present
 function checkLoggedIn() {
   const cookies = document.cookie;
-  const cookieArray = cookies.split("; ");
-  const tokenCookie = cookieArray.find((cookie) => cookie.startsWith("token="));
+  const cookieArray = cookies.split('; ');
+  const tokenCookie = cookieArray.find((cookie) => cookie.startsWith('token='));
   if (tokenCookie) {
     // Token cookie is present, user is logged in
     return true;
@@ -229,13 +217,9 @@ In most backend frameworks or libraries, the token will be available in the HTTP
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-export const validateToken = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const validateToken = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.token; // way to Access the 'token' cookie value if using http-only cookie
-  console.log("validate token: ", token);
+  console.log('validate token: ', token);
 
   if (token) {
     // Now you have the JWT token, and you can proceed to validate and use it as needed.
@@ -253,22 +237,22 @@ OR
 
 ```ts
 function getCookie(name) {
-  const value = "; " + document.cookie;
-  const parts = value.split("; " + name + "=");
-  if (parts.length === 2) return parts.pop().split(";").shift();
+  const value = '; ' + document.cookie;
+  const parts = value.split('; ' + name + '=');
+  if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 function isTokenExpired(token) {
   if (!token) return true;
 
-  const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decoding the token payload
+  const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decoding the token payload
   const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
 
   return decodedToken.exp < currentTime; // Comparing expiration time with current time
 }
 
 //usage
-const token = getCookie("token");
+const token = getCookie('token');
 if (!isTokenExpired(token)) {
   // Token is not expired, user is logged in
   // Show the logout button or perform other actions for a logged-in user
@@ -286,7 +270,7 @@ if (!isTokenExpired(token)) {
 
 ```ts
 // Assume token is the JWT token received from the server
-localStorage.setItem("token", token);
+localStorage.setItem('token', token);
 ```
 
 ### using JWT token
@@ -317,7 +301,7 @@ if (isLoggedIn) {
 ```
 
 ```ts
-const token = getCookie("token");
+const token = getCookie('token');
 if (!isTokenExpired(token)) {
   // Token is not expired, user is logged in
   // Show the logout button or perform other actions for a logged-in user
@@ -327,7 +311,7 @@ if (!isTokenExpired(token)) {
 }
 
 // Clear the token from storage on logout
-localStorage.removeItem("token");
+localStorage.removeItem('token');
 ```
 
 ### crossroads for state

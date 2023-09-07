@@ -13,56 +13,51 @@ export const PasswordReset = () => {
   const actionData = useActionData();
   let output;
 
-  if(actionData?.meta?.status){
-    output = (<div>password updated</div>)
+  if (actionData?.meta?.status) {
+    output = <div>password updated</div>;
     return output;
   }
 
-  if (loaderData?.meta?.isResetTokenValid === false){ 
+  if (loaderData?.meta?.isResetTokenValid === false) {
     output = (
       <div>
         token expired. request new reset password
-        <Link to='/auth/password-init-reset'>link</Link>
+        <Link to="/auth/password-init-reset">link</Link>
       </div>
     );
-  }
-    
-  else{
+  } else {
     output = (
       <div className={styles.wrapper}>
-        <Form
-          className={styles['form']}
-          action={`/auth/password-reset/${token}`}
-          method='POST'
-        >
+        <Form className={styles['form']} action={`/auth/password-reset/${token}`} method="POST">
           <div className={styles['form-control']}>
-            <label htmlFor='password'>new password</label>
-            <input type='password' name='password' id='password' />
+            <label htmlFor="password">new password</label>
+            <input type="password" name="password" id="password" />
           </div>
           <div className={styles['form-control']}>
-            <label htmlFor='confirmPassword'>Confirm password</label>
-            <input
-              type='password'
-              name='confirmPassword'
-              id='confirmPassword'
-            />
+            <label htmlFor="confirmPassword">Confirm password</label>
+            <input type="password" name="confirmPassword" id="confirmPassword" />
           </div>
 
           <br />
           <div className={styles['form-control']}>
             {actionData?.errors &&
               actionData.errors.map((error, index) => {
-                return <div key={index}>{error.title ? `${error.title}:`:''}{error.detail ? `${error.detail}`:''}</div>;
+                return (
+                  <div key={index}>
+                    {error.title ? `${error.title}:` : ''}
+                    {error.detail ? `${error.detail}` : ''}
+                  </div>
+                );
               })}
           </div>
 
           <div className={styles['form-buttons']}>
-            <button type='submit'>Update</button>
+            <button type="submit">Update</button>
           </div>
         </Form>
       </div>
     );
-  } 
+  }
 
   return output;
 };
@@ -71,9 +66,7 @@ export const loader = async ({ params }) => {
   const { token } = params;
 
   //make a call to server to check that token is still valid
-  const URI = `${
-    import.meta.env.VITE_BACKEND_URI
-  }/auth/verify/reset/${token}`;
+  const URI = `${import.meta.env.VITE_BACKEND_URI}/auth/verify/reset/${token}`;
 
   const fetched = await fetch(URI, {
     method: 'GET',

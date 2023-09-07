@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  useLoaderData,
-  NavLink,
-  useSearchParams,
-  useNavigate,
-  useHref,
-} from 'react-router-dom';
+import { useLoaderData, NavLink, useSearchParams, useNavigate, useHref } from 'react-router-dom';
 
 import styles from './Shopping.module.css';
 
@@ -42,9 +36,6 @@ export const Shopping = () => {
   //   if (+page < 1) {
   //     newPage = 1;
   //   }
-
-  //   console.log('-------------------------------------\nnewPage: ', newPage);
-
   //   navigate(`${currentUrl}?page=${newPage}&items=${perPage}`);
   // };
 

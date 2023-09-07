@@ -6,35 +6,30 @@ import { formDataLikeJsonApi } from '../../lib/helpers/formDataLikeJsonApi';
 
 export const AddProduct = () => {
   return (
-    <Form
-      className='product-details'
-      encType='multipart/form-data'
-      action='/products/create'
-      method='post'
-    >
+    <Form className="product-details" encType="multipart/form-data" action="/products/create" method="post">
       <h2>Add new product:</h2>
 
       <div className={styles['form-control']}>
-        <label htmlFor='title'>title:</label>
-        <input name='title' />
+        <label htmlFor="title">title:</label>
+        <input name="title" />
       </div>
 
       <div className={styles['form-control']}>
-        <label htmlFor='description'>description:</label>
-        <input name='description' />
+        <label htmlFor="description">description:</label>
+        <input name="description" />
       </div>
 
       <div className={styles['form-control']}>
-        <label htmlFor='price'>price:</label>
-        <input name='price' />
+        <label htmlFor="price">price:</label>
+        <input name="price" />
       </div>
 
       <div className={styles['form-control']}>
-        <label htmlFor='upload'>upload:</label>
-        <input name='upload' type='file' />
+        <label htmlFor="upload">upload:</label>
+        <input name="upload" type="file" />
       </div>
 
-      <button type='submit'>submit</button>
+      <button type="submit">submit</button>
     </Form>
   );
 };
@@ -49,9 +44,7 @@ export const action = async ({ request }) => {
   const jsonData = formDataLikeJsonApi(formData, 'product');
 
   //check if formData.
-  const url = `${import.meta.env.VITE_BACKEND_URL}:${
-    import.meta.env.VITE_BACKEND_PORT
-  }/products`;
+  const url = `${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/products`;
 
   // //send post request
   const result = await fetch(url, {

@@ -1,11 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {
-  Form,
-  useLoaderData,
-  useParams,
-  useNavigate,
-  redirect,
-} from 'react-router-dom';
+import { Form, useLoaderData, useParams, useNavigate, redirect } from 'react-router-dom';
 
 import styles from './AddProduct.module.css';
 
@@ -47,10 +41,7 @@ export const EditProduct = () => {
   };
 
   const deleteProduct = async () => {
-    console.log('productId: ', productId);
-    const url = `${import.meta.env.VITE_BACKEND_URL}:${
-      import.meta.env.VITE_BACKEND_PORT
-    }/products/${productId}`;
+    const url = `${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/products/${productId}`;
 
     const result = await fetch(url, {
       method: 'DELETE',
@@ -59,67 +50,48 @@ export const EditProduct = () => {
       },
     });
 
-    console.log('result: ', result);
-
     if (result.ok) {
-      console.log('OKAY!');
       return navigate('/products');
     }
     return result;
   };
 
   return (
-    <Form
-      className='product-details'
-      encType='multipart/form-data'
-      action={`/products/${productId}`}
-      method='PUT'
-    >
+    <Form className="product-details" encType="multipart/form-data" action={`/products/${productId}`} method="PUT">
       <h2>Add new product:</h2>
 
       <div className={styles['form-control']}>
-        <label htmlFor='title'>title:</label>
-        <input name='title' defaultValue={product.title} />
+        <label htmlFor="title">title:</label>
+        <input name="title" defaultValue={product.title} />
       </div>
 
       <div className={styles['form-control']}>
-        <label htmlFor='description'>description:</label>
-        <input name='description' defaultValue={product.description} />
+        <label htmlFor="description">description:</label>
+        <input name="description" defaultValue={product.description} />
       </div>
 
       <div className={styles['form-control']}>
-        <label htmlFor='price'>price:</label>
-        <input name='price' defaultValue={product.price} />
+        <label htmlFor="price">price:</label>
+        <input name="price" defaultValue={product.price} />
       </div>
 
       {product.imageUrl && (
         <div className={styles['form-control']}>
-          <label htmlFor='imageUrl:'>current image:</label>
-          <input
-            type='hidden'
-            name='imageUrl'
-            defaultValue={product.imageUrl}
-          />
+          <label htmlFor="imageUrl:">current image:</label>
+          <input type="hidden" name="imageUrl" defaultValue={product.imageUrl} />
           {/* preview of what is currently saved */}
           <img
-            src={`${import.meta.env.VITE_BACKEND_URL}:${
-              import.meta.env.VITE_BACKEND_PORT
-            }/images/${product.imageUrl}`}
+            src={`${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/images/${product.imageUrl}`}
             alt={product.title}
-            width='150'
-            height='auto'
+            width="150"
+            height="auto"
           />
         </div>
       )}
 
       <div className={styles['form-control']}>
-        <label htmlFor='upload'>new image:</label>
-        <input
-          name='upload'
-          type='file'
-          ref={fileInputRef}
-          onChange={handleFileChange}
-        />
+        <label htmlFor="upload">new image:</label>
+        <input name="upload" type="file" ref={fileInputRef} onChange={handleFileChange} />
       </div>
 
       {/* Preview image container */}
@@ -133,11 +105,7 @@ export const EditProduct = () => {
             height: 'auto',
           }}
         >
-          <img
-            src={filePreview}
-            alt='File Preview'
-            style={{ maxWidth: '100%' }}
-          />
+          <img src={filePreview} alt="File Preview" style={{ maxWidth: '100%' }} />
           <button style={{ height: '35px' }} onClick={handleReset}>
             delete
           </button>
@@ -145,10 +113,10 @@ export const EditProduct = () => {
       )}
 
       <div>
-        <button type='button' onClick={deleteProduct}>
+        <button type="button" onClick={deleteProduct}>
           delete
         </button>
-        <button type='submit'>submit</button>
+        <button type="submit">submit</button>
       </div>
     </Form>
   );
@@ -158,9 +126,7 @@ export const EditProduct = () => {
 export const loader = async ({ params }) => {
   const { productId } = params;
 
-  const url = `${import.meta.env.VITE_BACKEND_URL}:${
-    import.meta.env.VITE_BACKEND_PORT
-  }/products/${productId}`;
+  const url = `${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/products/${productId}`;
 
   const result = await fetch(url, {
     method: 'GET',
@@ -184,9 +150,7 @@ export async function action({ request, params }) {
   //   newFormData.append(key, value);
   // }
 
-  const url = `${import.meta.env.VITE_BACKEND_URL}:${
-    import.meta.env.VITE_BACKEND_PORT
-  }/products/${productId}`;
+  const url = `${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/products/${productId}`;
 
   const result = await fetch(url, {
     method: 'PUT',
