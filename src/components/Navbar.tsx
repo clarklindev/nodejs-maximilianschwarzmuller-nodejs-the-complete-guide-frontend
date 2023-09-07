@@ -17,48 +17,30 @@ export const Navbar = () => {
     <header>
       <nav className={styles.navbar}>
         <div className={styles.navLeft}>
-          <NavLink
-            className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-            to='/'
-          >
+          <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to="/">
             Home
           </NavLink>
 
-          <NavLink
-            className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-            to='about'
-          >
+          <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to="about">
             About
           </NavLink>
 
-          <NavLink
-            className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-            to='help'
-          >
+          <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to="help">
             Help
           </NavLink>
         </div>
 
         {isTokenValid ? (
           <div className={styles.navRight}>
-            <NavLink
-              className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-              to='products'
-            >
+            <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to="products">
               Admin
             </NavLink>
 
-            <NavLink
-              className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-              to='shop/orders'
-            >
+            <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to="shop/orders">
               Orders
             </NavLink>
 
-            <NavLink
-              className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-              to='shop/cart'
-            >
+            <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to="shop/cart">
               Cart
             </NavLink>
 
@@ -66,16 +48,10 @@ export const Navbar = () => {
           </div>
         ) : (
           <div>
-            <NavLink
-              className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-              to='shop/cart'
-            >
+            <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to="shop/cart">
               Cart
             </NavLink>
-            <NavLink
-              className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-              to='auth/login'
-            >
+            <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to="auth/login">
               Login
             </NavLink>
           </div>

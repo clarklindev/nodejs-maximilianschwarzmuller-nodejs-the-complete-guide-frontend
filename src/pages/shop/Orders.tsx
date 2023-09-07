@@ -48,7 +48,6 @@ export const Orders = () => {
         document.body.removeChild(link);
       }
     } catch (error) {
-      console.error('Error:', error);
       throw error; // Rethrow the error so the calling code can handle it
     }
   };

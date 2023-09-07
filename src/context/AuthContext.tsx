@@ -3,7 +3,7 @@ import { useToken } from '../shared/hooks/useToken';
 
 export const AuthContext = createContext({
   isTokenValid: false,
-  setToken: (token:string) => {},
+  setToken: (token: string) => {},
 });
 
 export const AuthContextProvider: React.FC = (props) => {
@@ -15,9 +15,5 @@ export const AuthContextProvider: React.FC = (props) => {
     isTokenValid,
   };
 
-  return (
-    <AuthContext.Provider value={stuffToShare}>
-      {props.children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={stuffToShare}>{props.children}</AuthContext.Provider>;
 };

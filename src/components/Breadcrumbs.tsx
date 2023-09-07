@@ -14,11 +14,8 @@ export const Breadcrumbs = () => {
       currentLink += `/${crumb}`;
 
       return (
-        <div className='crumb' key={crumb}>
-          <NavLink
-            className={({ isActive }) => `nav-link ${isActive && 'active'}`}
-            to={currentLink}
-          >
+        <div className="crumb" key={crumb}>
+          <NavLink className={({ isActive }) => `nav-link ${isActive && 'active'}`} to={currentLink}>
             {crumb}
           </NavLink>
         </div>

@@ -1,8 +1,8 @@
-.form-control{
+.form-control {
   display: flex;
   margin-bottom: 15px;
 }
 
-.form-control label{
+.form-control label {
   width: 100px;
 }

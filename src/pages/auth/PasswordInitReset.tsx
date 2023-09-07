@@ -14,29 +14,28 @@ export const PasswordInitReset = () => {
 
   return (
     <div className={styles.wrapper}>
-      <Form
-        className={styles['form']}
-        method='POST'
-        action='/auth/password-init-reset'
-      >
+      <Form className={styles['form']} method="POST" action="/auth/password-init-reset">
         <div className={styles['form-control']}>
-          <label htmlFor='email'>Email</label>
-          <input type='email' name='email' id='email' />
+          <label htmlFor="email">Email</label>
+          <input type="email" name="email" id="email" />
         </div>
         <div className={styles['form-buttons']}>
-          <button type='submit'>Reset</button>
+          <button type="submit">Reset</button>
         </div>
-
         <br />
         <div className={styles['form-control']}>
           {actionData?.errors &&
             actionData.errors.map((error, index) => {
-              return <div key={index}>{error.title ? `${error.title}:`:''}{error.detail ? `${error.detail}`:''}</div>;
+              return (
+                <div key={index}>
+                  {error.title ? `${error.title}:` : ''}
+                  {error.detail ? `${error.detail}` : ''}
+                </div>
+              );
             })}
         </div>
-        
         <br />
-        back to <NavLink to='/auth/login'>login</NavLink>
+        back to <NavLink to="/auth/login">login</NavLink>
       </Form>
     </div>
   );

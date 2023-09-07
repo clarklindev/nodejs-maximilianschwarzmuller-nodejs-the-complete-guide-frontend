@@ -7,22 +7,14 @@ export const HelpLayout = () => {
     <div>
       <nav className={styles.nav}>
         <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? `${styles['nav-link']} ${styles['active']}`
-              : styles['nav-link']
-          }
-          to='faq'
+          className={({ isActive }) => (isActive ? `${styles['nav-link']} ${styles['active']}` : styles['nav-link'])}
+          to="faq"
         >
           <h2>faq</h2>
         </NavLink>
         <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? `${styles['nav-link']} ${styles['active']}`
-              : styles['nav-link']
-          }
-          to='contact'
+          className={({ isActive }) => (isActive ? `${styles['nav-link']} ${styles['active']}` : styles['nav-link'])}
+          to="contact"
         >
           <h2>contact us</h2>
         </NavLink>
